@@ -81,6 +81,7 @@ public class Graph {
             int currNode = queue.pop();
             int[] neighbours = getNeighbours(currNode);
             for (int n : neighbours) {
+                if (n == -1) continue;
                 if (n == nodeB) {
                     return distances[currNode] + 1;
                 }
