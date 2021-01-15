@@ -9,10 +9,10 @@ class Parser {
 
     private static final String FILENAME = "com-youtube.ungraph.txt";
 
-    int nbNodes;
-    int nbEdges;
-    int[] edgeStart;
-    int[] edgeEnd;
+    public int nbNodes;
+    public int nbEdges;
+    public int[] edgeStart;
+    public int[] edgeEnd;
 
     public Parser(String[] args) throws IOException {
 
@@ -64,7 +64,7 @@ class Parser {
     }
 
     public int countNodes(String file) throws IOException {
-        Set<Integer> nodes = new HashSet<>();
+        int maxNode = -1;
         BufferedReader br;
         br = new BufferedReader(new FileReader(filePath(file)));
         String line;
@@ -73,11 +73,11 @@ class Parser {
                 continue;
             }
             String[] tokens = line.split("\\s+");
-            nodes.add(Integer.parseInt(tokens[0]));
-            nodes.add(Integer.parseInt(tokens[1]));
+            int u = Integer.parseInt(tokens[0]);
+            int v = Integer.parseInt(tokens[0]);
+            maxNode = Integer.max(maxNode, Integer.max(u, v));
         }
-        nbNodes = nodes.size();
-        return nbNodes;
+        return maxNode;
     }
 
     public BufferedReader readFile(String filename) throws FileNotFoundException {
@@ -85,9 +85,7 @@ class Parser {
     }
 
     public String filePath(String filename) {
-        return System.getProperty("user.dir")
-                .concat("/src/main/resources/")
-                .concat(filename); // to define
+        return filename;
     }
 
 }
