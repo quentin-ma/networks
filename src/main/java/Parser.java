@@ -2,28 +2,40 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.HashSet;
 import java.util.Set;
 
 class Parser {
 
-    private static final String FILENAME = "com-youtube.ungraph.txt";
+    public String file;
 
     public int nbNodes;
     public int nbEdges;
+
+    public int[] edgeCount;
     public int[] edgeStart;
     public int[] edgeEnd;
 
-    public Parser(String[] args) throws IOException {
+    public Parser(String filePath, int nbEdges) throws IOException {
 
-        this.nbNodes = countNodes(FILENAME);
-        this.nbEdges = countEdges();
+        this.file = filePath;
+
+        this.nbNodes = countNodes();
+        this.nbEdges = nbEdges;
+
+        this.edgeCount = new int[nbNodes];
         this.edgeStart = new int[nbEdges];
         this.edgeEnd = new int[nbEdges];
+
+        readEdges();
     }
 
-    public int countEdges() throws IOException {
-        BufferedReader br = readFile(FILENAME);
+    /*
+    Unecessary as nbEdges is given
+
+    private int countEdges() throws IOException {
+        BufferedReader br = readFile();
         String line;
         int count = 0;
         while ((line = br.readLine()) != null) {
@@ -38,35 +50,42 @@ class Parser {
         }
         return count;
     }
+    */
 
-    public void readEdges() throws IOException {
-        BufferedReader br = readFile(FILENAME);
+    /**
+     * Compute all edges and note how many edges each node has
+     * @throws IOException
+     */
+    private void readEdges() throws IOException {
+        BufferedReader br = readFile();
         String line;
-        int start, end;
-        int tmpStart = 0, tmpEnd = 0;
-        int i = 0, j = 0;
+        int i = 0;
         while ((line = br.readLine()) != null) {
             if (line.startsWith("#")) {
                 continue;
             }
-            String[] vertex = line.split("\\s+");
-            start = Integer.parseInt(vertex[0]);
-            if (start != tmpStart) {
-                this.edgeStart[i++] = start;
-                tmpStart = start;
-            }
-            end = Integer.parseInt(vertex[1]);
-            if (end != tmpEnd) {
-                this.edgeEnd[j++] = end;
-                tmpEnd = end;
-            }
+            String[] tokens = line.split("\\s+");
+            int u = Integer.parseInt(tokens[0]);
+            int v = Integer.parseInt(tokens[1]);
+            edgeStart[i] = u;
+            edgeEnd[i] = v;
+            edgeCount[u]++;
+            edgeCount[v]++;
+            i++;
         }
     }
 
-    public int countNodes(String file) throws IOException {
+    /**
+     * Count the amount of node in a graph, the amount being
+     * max(nodes) + 1
+     * 
+     * @return Number of nodes, -1 if none
+     * @throws IOException
+     */
+    private int countNodes() throws IOException {
         int maxNode = -1;
         BufferedReader br;
-        br = new BufferedReader(new FileReader(filePath(file)));
+        br = readFile();
         String line;
         while ((line = br.readLine()) != null) {
             if (line.startsWith("#")) {
@@ -74,19 +93,14 @@ class Parser {
             }
             String[] tokens = line.split("\\s+");
             int u = Integer.parseInt(tokens[0]);
-            int v = Integer.parseInt(tokens[0]);
+            int v = Integer.parseInt(tokens[1]);
             maxNode = Integer.max(maxNode, Integer.max(u, v));
         }
-        return maxNode;
+        return maxNode + 1;
     }
 
-    public BufferedReader readFile(String filename) throws FileNotFoundException {
-        return new BufferedReader(new FileReader(filePath(filename)));
-    }
-
-    public String filePath(String filename) {
-        return filename;
+    private BufferedReader readFile() throws IOException {
+        return new BufferedReader(new FileReader(file));
     }
 
 }
-
