@@ -42,7 +42,7 @@ class Parser {
             if (line.startsWith("#")) {
                 continue;
             }
-            if (line.split("\\s+").length == 2) {
+            if (line.split("\\W+").length == 2) {
                 count++;
             } else {
                 break;
@@ -64,7 +64,7 @@ class Parser {
             if (line.startsWith("#")) {
                 continue;
             }
-            String[] tokens = line.split("\\s+");
+            String[] tokens = line.split("\\W+");
             int u = Integer.parseInt(tokens[0]);
             int v = Integer.parseInt(tokens[1]);
             edgeStart[i] = u;
@@ -91,7 +91,7 @@ class Parser {
             if (line.startsWith("#")) {
                 continue;
             }
-            String[] tokens = line.split("\\s+");
+            String[] tokens = line.split("\\W+");
             int u = Integer.parseInt(tokens[0]);
             int v = Integer.parseInt(tokens[1]);
             maxNode = Integer.max(maxNode, Integer.max(u, v));

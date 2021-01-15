@@ -1,3 +1,4 @@
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -71,7 +72,7 @@ public class Graph {
         if (nodeA == nodeB) {
             return 0;
         }
-        LinkedList<Integer> queue = new LinkedList<>();
+        ArrayDeque<Integer> queue = new ArrayDeque<>();
         int[] distances = new int[nbNodes];
         Arrays.fill(distances, -1);
         queue.add(nodeA);
@@ -80,6 +81,7 @@ public class Graph {
             int currNode = queue.pop();
             int[] neighbours = getNeighbours(currNode);
             for (int n : neighbours) {
+                if (n == -1) continue;
                 if (n == nodeB) {
                     return distances[currNode] + 1;
                 }
