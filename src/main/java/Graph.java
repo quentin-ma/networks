@@ -1,6 +1,5 @@
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.LinkedList;
 
 public class Graph {
 
@@ -29,6 +28,13 @@ public class Graph {
         for (int edge = 0; edge < nbEdges; edge++) {
             int u = p.edgeStart[edge];
             int v = p.edgeEnd[edge];
+
+            if(u == -1) {
+                // If this edge does not exist
+                // Then edge count has been overestimated
+                break;
+            }
+
             addEdge(u, v);
             addEdge(v, u); // Remove this line to remove bidirectionnal vertex
         }
