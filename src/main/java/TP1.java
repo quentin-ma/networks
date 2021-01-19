@@ -28,17 +28,17 @@ class TP1 {
             System.exit(1);
         }
 
-        long start = System.currentTimeMillis();
+        //long start = System.currentTimeMillis();
 
         Parser parser = new Parser(filePath, edgeCount);
-        Graph g = new Graph(parser);
-
-        long end = System.currentTimeMillis();
-
-        System.err.println("Graph loaded in " + (end - start) + "ms");
         mem();
+        Graph g = new Graph(parser);
+        mem();
+
+        //long end = System.currentTimeMillis();
+        //System.err.println("Graph loaded in " + (end - start) + "ms");
 
         System.out.println(g + "\ndist=" + g.distance(startNode, endNode));
-        mem();
+
     }
 }

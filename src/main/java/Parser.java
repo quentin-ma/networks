@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
 class Parser {
 
@@ -21,36 +18,17 @@ class Parser {
 
         this.file = filePath;
 
-        this.nbNodes = countNodes();
-        this.nbEdges = nbEdges;
+        this.countEdgesAndNodes();
 
         this.edgeCount = new int[nbNodes];
-        this.edgeStart = new int[nbEdges];
-        this.edgeEnd = new int[nbEdges];
+        this.edgeStart = new int[this.nbEdges];
+        this.edgeEnd = new int[this.nbEdges];
+
+        Arrays.fill(edgeStart, -1);
+        Arrays.fill(edgeEnd, -1);
 
         readEdges();
     }
-
-    /*
-    Unecessary as nbEdges is given
-
-    private int countEdges() throws IOException {
-        BufferedReader br = readFile();
-        String line;
-        int count = 0;
-        while ((line = br.readLine()) != null) {
-            if (line.startsWith("#")) {
-                continue;
-            }
-            if (line.split("\\W+").length == 2) {
-                count++;
-            } else {
-                break;
-            }
-        }
-        return count;
-    }
-    */
 
     /**
      * Compute all edges and note how many edges each node has
@@ -76,13 +54,12 @@ class Parser {
     }
 
     /**
-     * Count the amount of node in a graph, the amount being
-     * max(nodes) + 1
+     * Compute the amount of edges and nodes of a given
+     * graph
      * 
-     * @return Number of nodes, -1 if none
      * @throws IOException
      */
-    private int countNodes() throws IOException {
+    private void countEdgesAndNodes() throws IOException {
         int maxNode = -1;
         BufferedReader br;
         br = readFile();
@@ -95,8 +72,9 @@ class Parser {
             int u = Integer.parseInt(tokens[0]);
             int v = Integer.parseInt(tokens[1]);
             maxNode = Integer.max(maxNode, Integer.max(u, v));
+            this.nbEdges++;
         }
-        return maxNode + 1;
+        this.nbNodes = maxNode + 1;
     }
 
     private BufferedReader readFile() throws IOException {
