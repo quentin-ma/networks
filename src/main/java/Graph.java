@@ -62,7 +62,7 @@ public class Graph {
      */
     public int[] getNeighbours(int node) {
         if (node + 1 == nbNodes) {
-            return Arrays.copyOfRange(neighbours, neighbourIndexes[node], nbEdges);
+            return Arrays.copyOfRange(neighbours, neighbourIndexes[node], nbEdges * 2);
         }
         return Arrays.copyOfRange(neighbours, neighbourIndexes[node], neighbourIndexes[node + 1]);
     }
@@ -97,7 +97,7 @@ public class Graph {
                 }
             }
         }
-        return -1;
+        return Integer.MAX_VALUE;
     }
 
     @Override
