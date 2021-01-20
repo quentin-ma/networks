@@ -19,6 +19,7 @@ class Parser {
         this.file = filePath;
 
         this.countEdgesAndNodes();
+        this.nbEdges = nbEdges;
 
         this.edgeCount = new int[nbNodes];
         this.edgeStart = new int[this.nbEdges];
@@ -38,7 +39,8 @@ class Parser {
         BufferedReader br = readFile();
         String line;
         int i = 0;
-        while ((line = br.readLine()) != null) {
+        while ((line = br.readLine()) != null
+            && i < this.nbEdges) {
             if (line.startsWith("#")) {
                 continue;
             }
@@ -72,7 +74,7 @@ class Parser {
             int u = Integer.parseInt(tokens[0]);
             int v = Integer.parseInt(tokens[1]);
             maxNode = Integer.max(maxNode, Integer.max(u, v));
-            this.nbEdges++;
+            //this.nbEdges++; Use given node count instead
         }
         this.nbNodes = maxNode + 1;
     }
