@@ -3,3 +3,5 @@
 *.class
 *.csv
 *.zip
+.idea
+grimawan.iml
