@@ -1,4 +1,4 @@
-import java.util.Arrays;
+    import java.util.Arrays;
 
 public class Clusters {
 
@@ -10,13 +10,9 @@ public class Clusters {
 
     int tri(Graph g, int u) {
         Arrays.fill(isNeighbor, false);
-
         int nbTri = 0;
         for (int v : g.neighbors(u)) {
             isNeighbor[v] = true;
-            if (g.degree(v) == 1) {
-                continue;
-            }
             for (int w : g.neighbors(v)) {
                 if (isNeighbor[w]) {
                     nbTri++;
@@ -29,14 +25,30 @@ public class Clusters {
     float localCluCf(Graph g) {
         float cluL = 0;
         int tri_x;
-        for (int i = 1; i < g.n; i++) {
+        for (int i = 0; i < g.n; i++) {
             tri_x = tri(g, i);
-            if (tri_x > 0) {
+            if (g.degree(i) >= 2) {
                 cluL += (float) (2 * tri_x) / (g.degree(i) * (g.degree(i) - 1));
+            } else {
+                cluL += 0;
             }
         }
         cluL = cluL * ((float) 1 / g.n);
         return cluL;
+    }
+
+    float globalClustCf(Graph g) {
+        int nbTri = 0;
+        for (int i = 0; i < g.n; i++) {
+            nbTri += tri(g, i);
+        }
+        // number of triangles in G
+        int triangles = (int) (3 * ((float) 1 / 3 * nbTri));
+        int triplets = 0;
+        for (int i = 0; i < g.n; i++) {
+            triplets += (g.degree(i) * (g.degree(i) - 1)) / 2;
+        }
+        return (float) triangles / triplets;
     }
 
     float globalCluCf(Graph g) {
@@ -44,7 +56,9 @@ public class Clusters {
         for (int i = 0; i < g.n; i++) {
             nbTri += tri(g, i);
         }
+        // number of triangles in G
         float res = 3 * ((float) 1 / 3 * nbTri);
+
 
         int t_i = 0;
         float t_g;
@@ -54,6 +68,6 @@ public class Clusters {
             }
         }
         t_g = res / t_i;
-        return t_g;
+        return t_g * 2;
     }
 }

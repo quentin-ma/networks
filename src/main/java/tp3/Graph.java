@@ -8,12 +8,13 @@ class Graph implements Iterable<Integer> {
     int[] adjacency; // all adjacency lists concatenated
     int[] offset; // offset[u] is the index of neighbors of u in adjacency
     // neighbors of u are adjacency[offset[u]]...adjacency[offset[u+1]-1]
+    int[] deg;
 
     public Graph(Edges edg, boolean symmetrize) {
         n = edg.n;
         m = edg.m;
         // offsets :
-        int[] deg = edg.degrees(symmetrize);
+        deg = edg.degrees(symmetrize);
         offset = new int[n + 1];
         offset[0] = 0;
         for (int u = 0; u < n; ++u) {
