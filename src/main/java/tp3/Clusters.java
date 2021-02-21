@@ -1,21 +1,35 @@
-    import java.util.Arrays;
+import java.util.Arrays;
 
 public class Clusters {
 
-    boolean[] isNeighbor;
+    boolean[] isCandidate;
+    int[] triangles;
+    int[] triplets;
 
     Clusters(Graph g) {
-        isNeighbor = new boolean[g.n];
+        isCandidate = new boolean[g.n];
+        triangles = new int[g.n];
+        triplets = new int[g.n];
+        init(g);
+    }
+
+    void init(Graph g) {
+        for (int i = 0; i < g.n; i++) {
+            triangles[i] = tri(g, i);
+            triplets[i] = g.degree(i) * (g.degree(i) - 1);
+        }
     }
 
     int tri(Graph g, int u) {
-        Arrays.fill(isNeighbor, false);
+        Arrays.fill(isCandidate, false);
         int nbTri = 0;
         for (int v : g.neighbors(u)) {
-            isNeighbor[v] = true;
-            for (int w : g.neighbors(v)) {
-                if (isNeighbor[w]) {
-                    nbTri++;
+            if (g.degree(v) > 1) {
+                isCandidate[v] = true;
+                for (int w : g.neighbors(v)) {
+                    if (isCandidate[w]) {
+                        nbTri++;
+                    }
                 }
             }
         }
@@ -24,50 +38,22 @@ public class Clusters {
 
     float localCluCf(Graph g) {
         float cluL = 0;
-        int tri_x;
         for (int i = 0; i < g.n; i++) {
-            tri_x = tri(g, i);
             if (g.degree(i) >= 2) {
-                cluL += (float) (2 * tri_x) / (g.degree(i) * (g.degree(i) - 1));
+                cluL += (float) (2 * triangles[i]) / triplets[i];
             } else {
                 cluL += 0;
             }
         }
-        cluL = cluL * ((float) 1 / g.n);
-        return cluL;
+        return cluL * 1 / g.n;
     }
 
     float globalClustCf(Graph g) {
-        int nbTri = 0;
+        int sumTriangles = 0, sumTriplets = 0;
         for (int i = 0; i < g.n; i++) {
-            nbTri += tri(g, i);
+            sumTriangles += triangles[i];
+            sumTriplets += triplets[i] / 2;
         }
-        // number of triangles in G
-        int triangles = (int) (3 * ((float) 1 / 3 * nbTri));
-        int triplets = 0;
-        for (int i = 0; i < g.n; i++) {
-            triplets += (g.degree(i) * (g.degree(i) - 1)) / 2;
-        }
-        return (float) triangles / triplets;
-    }
-
-    float globalCluCf(Graph g) {
-        int nbTri = 0;
-        for (int i = 0; i < g.n; i++) {
-            nbTri += tri(g, i);
-        }
-        // number of triangles in G
-        float res = 3 * ((float) 1 / 3 * nbTri);
-
-
-        int t_i = 0;
-        float t_g;
-        for (int i = 0; i < g.n; i++) {
-            if (g.degree(i) >= 2) {
-                t_i += (g.degree(i) * (g.degree(i) - 1));
-            }
-        }
-        t_g = res / t_i;
-        return t_g * 2;
+        return (float) sumTriangles / sumTriplets;
     }
 }

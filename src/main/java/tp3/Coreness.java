@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Tag {
+public class Coreness {
 
     PriorityQueue<Map.Entry<Integer, Integer>> queue;
     Edges edg;
@@ -9,7 +9,7 @@ public class Tag {
     int[] degrees;
     int n;
 
-    Tag(Edges edg, Graph g) {
+    Coreness(Edges edg, Graph g) {
         queue = new PriorityQueue<>(Map.Entry.comparingByValue());
         degrees = new int[g.n];
         isTag = new boolean[g.n];
