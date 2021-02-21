@@ -24,8 +24,7 @@ public class TP3 {
         edg.add(new FileReader(filename), nbEdges);
 
         Graph g = new Graph(edg, true);
-        Traversal trav = new Traversal(g.n);
-        Tag tag = new Tag(edg, g);
+        Coreness coreness = new Coreness(g);
         Clusters clusters = new Clusters(g);
 
         if (method.equals("triangles")) {
@@ -38,7 +37,7 @@ public class TP3 {
             float cluG = clusters.globalClustCf(g);
             System.out.format("%.5f\n", cluG);
         } else if (method.equals("k-coeur")) {
-            tag.finalQueue(g);
+            coreness.coreness(g);
         }
     }
 
