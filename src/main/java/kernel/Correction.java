@@ -31,13 +31,19 @@ class CorrEdges {
             if (sep < 0) sep = line.indexOf(' ');
             if (sep < 0) throw new Error("bad edge format");
             String su = line.substring(0, sep);
-            String sv = line.substring(sep+1);
+            String sv = line.substring(sep + 1);
             int u = Integer.parseInt(su);
             int v = Integer.parseInt(sv);
             // add edge u v:
-            if (m >= tail.length) { increaseCapacity(); }
-            if (u >= n) { n = u+1; }
-            if (v >= n) { n = v+1; }
+            if (m >= tail.length) {
+                increaseCapacity();
+            }
+            if (u >= n) {
+                n = u + 1;
+            }
+            if (v >= n) {
+                n = v + 1;
+            }
             tail[m] = u;
             head[m] = v;
             ++m;
@@ -46,8 +52,8 @@ class CorrEdges {
 
     void increaseCapacity() {
         // let's double array sizes:
-        int[] t = new int[2*tail.length];
-        int[] h = new int[2*tail.length];
+        int[] t = new int[2 * tail.length];
+        int[] h = new int[2 * tail.length];
         for (int i = 0; i < tail.length; ++i) {
             t[i] = tail[i];
             h[i] = head[i];
@@ -57,7 +63,7 @@ class CorrEdges {
     }
 
     int[] degrees(boolean symmetrize) {
-        int[] deg = new int [n];
+        int[] deg = new int[n];
         for (int e = 0; e < m; ++e) {
             deg[tail[e]]++;
             if (symmetrize) deg[head[e]]++;
@@ -67,7 +73,7 @@ class CorrEdges {
 }
 
 
-class CorrTP4 {
+class CorrPower {
 
     public static void main(String[] args) throws IOException {
         CorrEdges edg = new CorrEdges();
@@ -79,7 +85,7 @@ class CorrTP4 {
             int[] deg = edg.degrees(true);
             checkeq(deg.length, deg_exp.length, "le nombre de sommets");
             for (int u = 0; u < deg.length; ++u) {
-                checkeq(deg[u], deg_exp[u], "le degrÃ© de "+ u);
+                checkeq(deg[u], deg_exp[u], "le degrÃ© de " + u);
             }
         } else if (com.equals("racine")) {
             int n = Integer.parseInt(args[1]);
@@ -89,29 +95,31 @@ class CorrTP4 {
             for (int u = 0; u < n; ++u) {
                 int d = (int) Math.sqrt(u + 1.);
                 sum += d;
-                if (u == n-1 && sum % 2 == 1) { d += 1; }
-                checkeq(deg[u], d, "le degrÃ© de "+ u);
+                if (u == n - 1 && sum % 2 == 1) {
+                    d += 1;
+                }
+                checkeq(deg[u], d, "le degrÃ© de " + u);
             }
         } else if (com.equals("puissance")) {
             int n = Integer.parseInt(args[1]);
             double gamma = Double.parseDouble(args[2]);
             int[] deg = edg.degrees(true);
             Arrays.sort(deg);
-            int[] nb = new int [deg.length];
+            int[] nb = new int[deg.length];
             for (int i = 0; i < deg.length; ++i) {
                 nb[deg[i]] += 1;
             }
             double sum = 0.;
             for (int k = 1; k < n; ++k) {
-                sum += Math.pow((double) k, - gamma);
+                sum += Math.pow((double) k, -gamma);
             }
             for (int k = 1; k < deg.length; ++k) {
-                int exp = (int) Math.round( Math.pow((double) k, - gamma)
+                int exp = (int) Math.round(Math.pow((double) k, -gamma)
                         / sum * (double) n);
-                checkapprox(nb[k], exp, "le nombre de sommets de degrÃ© "+ k);
+                checkapprox(nb[k], exp, "le nombre de sommets de degrÃ© " + k);
             }
         } else {
-            System.err.println("Commande inconnue: "+ args[0]);
+            System.err.println("Commande inconnue: " + args[0]);
             System.exit(1);
         }
 
@@ -119,7 +127,7 @@ class CorrTP4 {
     }
 
     static void check(boolean test, String erreur) {
-        if ( ! test ) {
+        if (!test) {
             System.out.println("ProblÃ¨me : " + erreur);
             System.exit(1);
         }
@@ -127,16 +135,16 @@ class CorrTP4 {
 
     static void checkeq(int val, int expected, String erreur) {
         if (val != expected) {
-            System.out.println("ProblÃ¨me avec " + erreur +" : "
-                    + val + " au lieu de "+ expected);
+            System.out.println("ProblÃ¨me avec " + erreur + " : "
+                    + val + " au lieu de " + expected);
             System.exit(1);
         }
     }
 
     static void checkapprox(int val, int expected, String erreur) {
         if (Math.abs(val - expected) > 2) {
-            System.out.println("ProblÃ¨me avec " + erreur +" : "
-                    + val + " au lieu de "+ expected);
+            System.out.println("ProblÃ¨me avec " + erreur + " : "
+                    + val + " au lieu de " + expected);
             System.exit(1);
         }
     }

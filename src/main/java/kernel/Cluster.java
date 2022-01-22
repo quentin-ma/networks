@@ -1,13 +1,13 @@
 import java.util.Arrays;
 
-public class Clusters {
+public class Cluster {
 
     boolean[] isCandidate;
     int[] triangles;
     int[] triplets;
     double[] cluL;
 
-    Clusters(Graph g) {
+    Cluster(Graph g) {
         isCandidate = new boolean[g.n];
         triangles = new int[g.n];
         triplets = new int[g.n];

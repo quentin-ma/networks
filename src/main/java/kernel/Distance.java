@@ -1,7 +1,7 @@
 import java.io.FileReader;
 import java.io.IOException;
 
-class TP2 {
+class Distance {
 
     public static void mem() {
         Runtime rt = Runtime.getRuntime();
@@ -10,31 +10,29 @@ class TP2 {
         System.err.flush();
     }
 
-    public static int exo1(Graph g, Traversal trav, int src) {
+    public static void two_sweep(Graph g, Traversal trav, int src) {
         trav.bfs(g, src);
         int v = trav.maxDist();
 
         if (v == -1) {
             System.out.println(String.format("diam>=%d", 0));
-            return 0;
+            return;
         }
 
         trav.bfs(g, v);
         int w = trav.maxDist();
         int distance = trav.distance(w);
 
-        System.out.println(String.format("v=%d\nw=%d\ndiam>=%d", w, v, distance));
-
-        return distance;
+        System.out.printf("v=%d\nw=%d\ndiam>=%d%n", w, v, distance);
     }
 
-    public static int exo2(Graph g, Traversal trav, int src) {
+    public static void four_sweep(Graph g, Traversal trav, int src) {
         trav.bfs(g, src);
         int v = trav.maxDist();
 
         if (v == -1) {
-            System.out.println(String.format("diam>=%d", 0));
-            return 0;
+            System.out.printf("diam>=%d%n", 0);
+            return;
         }
 
         trav.bfs(g, v);
@@ -52,12 +50,10 @@ class TP2 {
         int y = trav.maxDist();
         distance = trav.distance(y);
 
-        System.out.println(String.format("diam>=%d", distance));
-
-        return distance;
+        System.out.printf("diam>=%d%n", distance);
     }
 
-    public static int exo3(Graph g, Traversal trav, int src) {
+    public static void sum_sweep(Graph g, Traversal trav, int src) {
         int[] dist0, dist1, dist2, dist3;
         int node0, node1, node2, node3;
 
@@ -67,8 +63,8 @@ class TP2 {
         trav.bfs(g, node0);
 
         if (trav.maxDist() == -1) {
-            System.out.println(String.format("diam>=%d", 0));
-            return 0;
+            System.out.printf("diam>=%d%n", 0);
+            return;
         }
 
         dist0 = trav.distances();
@@ -100,13 +96,7 @@ class TP2 {
         if (currDist > distance)
             distance = currDist;
 
-        System.out.println(String.format("diam>=%d", distance));
-
-        return distance;
-    }
-
-    public static int exo4(Graph g, Traversal trav, int src) {
-        return 0;
+        System.out.printf("diam>=%d%n", distance);
     }
 
     public static void sum(int[] dest, int[] values) {
@@ -145,22 +135,15 @@ class TP2 {
         Traversal trav = new Traversal(g.n);
 
         if (method.equals("2-sweep")) {
-            exo1(g, trav, src);
+            two_sweep(g, trav, src);
         } else if (method.equals("4-sweep")) {
-            exo2(g, trav, src);
+            four_sweep(g, trav, src);
         } else if (method.equals("sum-sweep")) {
-            exo3(g, trav, src);
-        } else if (method.equals("diametre")) {
-            exo4(g, trav, src);
+            sum_sweep(g, trav, src);
         } else if (method.equals("all")) {
-            System.out.println("***** 2-sweep *******");
-            exo1(g, trav, src);
-            System.out.println("***** 4-sweep *******");
-            exo2(g, trav, src);
-            System.out.println("***** sum-sweep *****");
-            exo3(g, trav, src);
-            System.out.println("***** diametre ******");
-            exo4(g, trav, src);
+            two_sweep(g, trav, src);
+            four_sweep(g, trav, src);
+            sum_sweep(g, trav, src);
         }
 
     }

@@ -1,7 +1,7 @@
 import java.io.FileReader;
 import java.io.IOException;
 
-public class TP3 {
+public class Kernel {
 
     public static void mem() {
         Runtime rt = Runtime.getRuntime();
@@ -25,20 +25,21 @@ public class TP3 {
 
         Graph g = new Graph(edg, true);
         Coreness coreness = new Coreness(g);
-        Clusters clusters = new Clusters(g);
+        Cluster clusters = new Cluster(g);
 
-        if (method.equals("triangles")) {
-            int u = Integer.parseInt(args[3]);
-            int n = clusters.tri(g, u);
-            System.out.format("%d\n", n);
-        } else if (method.equals("clust")) {
-            float val = clusters.localCluCf(g);
-            System.out.format("%.5f\n", val);
-            float cluG = clusters.globalClustCf(g);
-            System.out.format("%.5f\n", cluG);
-        } else if (method.equals("k-coeur")) {
-            coreness.coreness(g);
+        switch (method) {
+            case "triangles" -> {
+                int u = Integer.parseInt(args[3]);
+                int n = clusters.tri(g, u);
+                System.out.format("%d\n", n);
+            }
+            case "clust" -> {
+                float val = clusters.localCluCf(g);
+                System.out.format("%.5f\n", val);
+                float cluG = clusters.globalClustCf(g);
+                System.out.format("%.5f\n", cluG);
+            }
+            case "k-coeur" -> coreness.coreness(g);
         }
     }
-
 }
